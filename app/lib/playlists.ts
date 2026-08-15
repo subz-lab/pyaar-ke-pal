@@ -1,5 +1,5 @@
 import { tracks, type Track } from "./tracks";
-import playlist2Data from "../../scratch/playlist2_tracks.json";
+import playlist2Data from "./playlist2_tracks.json";
 
 export interface Playlist {
   id: string;
