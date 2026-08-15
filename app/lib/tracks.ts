@@ -141,8 +141,8 @@ export const tracks: Track[] = [
     title: "Mann Ki Lagan",
     artist: "Rahat Fateh Ali Khan",
     cover: "https://c.saavncdn.com/209/Mann-Ki-Lagan-Hindi-2023-20250130073128-500x500.jpg",
-    audioUrl: "https://aac.saavncdn.com/481/895983677195e3d20c7e4f14b57c7f32_320.mp4",
-    duration: 274
+    audioUrl: "https://aac.saavncdn.com/209/1c4533e1433519691f5ab6949a41e99c_320.mp4",
+    duration: 271
   },
   {
     id: 18,
