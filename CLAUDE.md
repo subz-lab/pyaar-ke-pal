@@ -1,2 +1,2 @@
 @AGENTS.md
-playlist2 song 36 Taye Hai — Anupam Amod
+playlist 2 song 38 38. Deewana Deewana — Sonu Nigam
