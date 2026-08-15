@@ -5,17 +5,24 @@ import type { PlayerState } from "@/app/hooks/usePlayer";
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  const secs = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${mins}:${s < 10 ? "0" : ""}${s}`;
 }
 
 interface PlayerProps {
   player: PlayerState;
   onOpenTrackList: () => void;
+  onOpenPlaylistSelector: () => void;
 }
 
-export function Player({ player, onOpenTrackList }: PlayerProps) {
+export function Player({
+  player,
+  onOpenTrackList,
+  onOpenPlaylistSelector,
+}: PlayerProps) {
   const {
+    currentPlaylist,
     currentTrack,
     isPlaying,
     elapsed,
@@ -58,13 +65,30 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
 
         {/* Info & Seek */}
         <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
-          <div className="flex flex-col min-w-0">
-            <h2 className="text-[15px] font-semibold text-white truncate leading-tight tracking-wide">
-              {currentTrack.title}
-            </h2>
-            <p className="text-[12.5px] text-white/75 truncate font-normal leading-snug">
-              {currentTrack.artist}
-            </p>
+          <div className="flex items-center justify-between min-w-0">
+            <div className="flex flex-col min-w-0 pr-2">
+              <h2 className="text-[15px] font-semibold text-white truncate leading-tight tracking-wide">
+                {currentTrack.title}
+              </h2>
+              <p className="text-[12.5px] text-white/75 truncate font-normal leading-snug">
+                {currentTrack.artist}
+              </p>
+            </div>
+
+            {/* Playlist Pill Badge Button */}
+            <button
+              onClick={onOpenPlaylistSelector}
+              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-[11.5px] font-semibold text-amber-300 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-amber-500/10"
+              title="Change Playlist"
+            >
+              <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span className="truncate max-w-[100px]">{currentPlaylist.name}</span>
+              <svg className="w-3 h-3 text-amber-400/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -88,21 +112,33 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
           </div>
         </div>
 
-        {/* Transport */}
-        <div className="flex items-center gap-2 shrink-0 pl-2">
-          {/* Track List Button */}
+        {/* Transport Controls */}
+        <div className="flex items-center gap-2 shrink-0 pl-1">
+          {/* Playlist Icon Button */}
+          <button
+            onClick={onOpenPlaylistSelector}
+            aria-label="Change Playlist"
+            className="transport-btn p-1 text-amber-400/90 hover:text-amber-300"
+            title="Change Playlist"
+          >
+            <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </button>
+
+          {/* Song List Button */}
           <button
             onClick={onOpenTrackList}
             aria-label="Song List"
-            className="transport-btn"
+            className="transport-btn p-1"
             title="Song List"
           >
-            <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-[19px] h-[19px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h10m-10 4h6" />
             </svg>
           </button>
 
-          <button onClick={prev} aria-label="Previous Track" className="transport-btn">
+          <button onClick={prev} aria-label="Previous Track" className="transport-btn p-1">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
             </svg>
@@ -124,7 +160,7 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
             )}
           </button>
 
-          <button onClick={next} aria-label="Next Track" className="transport-btn">
+          <button onClick={next} aria-label="Next Track" className="transport-btn p-1">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
             </svg>
@@ -133,9 +169,9 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
       </div>
 
       {/* ─── MOBILE PLAYER (sm:hidden) ─── */}
-      <div className="sm:hidden flex flex-col gap-4 rounded-2xl p-5 glass-card select-none">
-        <div className="flex items-center gap-4">
-          <div className="relative w-16 h-16 shrink-0 rounded-full overflow-hidden shadow-xl ring-1 ring-white/20">
+      <div className="sm:hidden flex flex-col gap-3.5 rounded-2xl p-4 glass-card select-none">
+        <div className="flex items-center gap-3">
+          <div className="relative w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-xl ring-1 ring-white/20">
             <img
               src={currentTrack.cover}
               alt={currentTrack.title}
@@ -145,24 +181,36 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h2 className="text-[15px] font-semibold text-white truncate leading-tight">
+            <h2 className="text-[14px] font-semibold text-white truncate leading-tight">
               {currentTrack.title}
             </h2>
-            <p className="text-[12.5px] text-white/75 truncate mt-0.5">
+            <p className="text-[12px] text-white/75 truncate mt-0.5">
               {currentTrack.artist}
             </p>
           </div>
 
-          {/* Track List Button (mobile) */}
-          <button
-            onClick={onOpenTrackList}
-            aria-label="Song List"
-            className="transport-btn shrink-0"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h10m-10 4h6" />
-            </svg>
-          </button>
+          {/* Mobile Buttons */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={onOpenPlaylistSelector}
+              aria-label="Change Playlist"
+              className="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-[11.5px] font-semibold text-amber-300 flex items-center gap-1.5 shadow-md active:scale-95 transition-all"
+            >
+              <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span>Playlist</span>
+            </button>
+            <button
+              onClick={onOpenTrackList}
+              aria-label="Song List"
+              className="transport-btn p-1.5"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h10m-10 4h6" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-1">
@@ -183,7 +231,7 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-8 pt-1">
+        <div className="flex items-center justify-center gap-8 pt-0.5">
           <button onClick={prev} aria-label="Previous Track" className="transport-btn p-2">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
@@ -192,14 +240,14 @@ export function Player({ player, onOpenTrackList }: PlayerProps) {
           <button
             onClick={toggle}
             aria-label={isPlaying ? "Pause" : "Play"}
-            className="w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 flex items-center justify-center text-white shadow-lg active:scale-95 transition-all"
+            className="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 flex items-center justify-center text-white shadow-lg active:scale-95 transition-all"
           >
             {isPlaying ? (
-              <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                 <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
               </svg>
             ) : (
-              <svg className="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
             )}

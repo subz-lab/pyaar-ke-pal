@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { tracks, type Track } from "@/app/lib/tracks";
+import { playlists, type Playlist } from "@/app/lib/playlists";
+import type { Track } from "@/app/lib/tracks";
 
 export interface PlayerState {
+  currentPlaylist: Playlist;
+  currentPlaylistIndex: number;
+  playlists: Playlist[];
   currentTrack: Track;
   currentIndex: number;
   isPlaying: boolean;
@@ -17,19 +21,25 @@ export interface PlayerState {
   prev: () => void;
   seek: (fraction: number) => void;
   selectTrack: (index: number) => void;
+  switchPlaylist: (idOrIndex: string | number) => void;
+  nextPlaylist: () => void;
+  prevPlaylist: () => void;
 }
 
 export function usePlayer(): PlayerState {
+  const [playlistIndex, setPlaylistIndex] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const [duration, setDuration] = useState(tracks[0]?.duration || 240);
   const [isLoading, setIsLoading] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const pendingPlay = useRef(false);
 
-  const currentTrack = tracks[currentIndex] || tracks[0];
+  const currentPlaylist = playlists[playlistIndex] || playlists[0];
+  const activeTracks = currentPlaylist.tracks;
+  const currentTrack = activeTracks[currentIndex] || activeTracks[0];
+  const [duration, setDuration] = useState(currentTrack?.duration || 240);
 
   // Initialize audio element
   useEffect(() => {
@@ -61,7 +71,7 @@ export function usePlayer(): PlayerState {
     const handleEnded = () => {
       setIsPlaying(false);
       pendingPlay.current = true;
-      setCurrentIndex((prev) => (prev + 1) % tracks.length);
+      setCurrentIndex((prev) => (prev + 1) % activeTracks.length);
     };
 
     const handleError = (e: Event) => {
@@ -86,12 +96,12 @@ export function usePlayer(): PlayerState {
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("error", handleError);
     };
-  }, []);
+  }, [activeTracks.length]);
 
-  // Update track src when currentIndex changes
+  // Update track src when currentIndex or active tracks change
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !currentTrack) return;
 
     setElapsed(0);
     setDuration(currentTrack.duration || 240);
@@ -153,13 +163,13 @@ export function usePlayer(): PlayerState {
 
   const next = useCallback(() => {
     pendingPlay.current = true;
-    setCurrentIndex((i) => (i + 1) % tracks.length);
-  }, []);
+    setCurrentIndex((i) => (i + 1) % activeTracks.length);
+  }, [activeTracks.length]);
 
   const prev = useCallback(() => {
     pendingPlay.current = true;
-    setCurrentIndex((i) => (i - 1 + tracks.length) % tracks.length);
-  }, []);
+    setCurrentIndex((i) => (i - 1 + activeTracks.length) % activeTracks.length);
+  }, [activeTracks.length]);
 
   const seek = useCallback(
     (fraction: number) => {
@@ -172,14 +182,51 @@ export function usePlayer(): PlayerState {
     [duration]
   );
 
-  const selectTrack = useCallback((index: number) => {
-    if (index >= 0 && index < tracks.length) {
-      pendingPlay.current = true;
-      setCurrentIndex(index);
-    }
-  }, []);
+  const selectTrack = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < activeTracks.length) {
+        pendingPlay.current = true;
+        setCurrentIndex(index);
+      }
+    },
+    [activeTracks.length]
+  );
+
+  const switchPlaylist = useCallback(
+    (idOrIndex: string | number) => {
+      let targetIdx = 0;
+      if (typeof idOrIndex === "number") {
+        targetIdx = (idOrIndex + playlists.length) % playlists.length;
+      } else {
+        const found = playlists.findIndex((p) => p.id === idOrIndex);
+        if (found !== -1) targetIdx = found;
+      }
+
+      if (targetIdx !== playlistIndex) {
+        const wasPlaying = isPlaying;
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        pendingPlay.current = wasPlaying;
+        setPlaylistIndex(targetIdx);
+        setCurrentIndex(0);
+      }
+    },
+    [playlistIndex, isPlaying]
+  );
+
+  const nextPlaylist = useCallback(() => {
+    switchPlaylist(playlistIndex + 1);
+  }, [playlistIndex, switchPlaylist]);
+
+  const prevPlaylist = useCallback(() => {
+    switchPlaylist(playlistIndex - 1);
+  }, [playlistIndex, switchPlaylist]);
 
   return {
+    currentPlaylist,
+    currentPlaylistIndex: playlistIndex,
+    playlists,
     currentTrack,
     currentIndex,
     isPlaying,
@@ -193,5 +240,8 @@ export function usePlayer(): PlayerState {
     prev,
     seek,
     selectTrack,
+    switchPlaylist,
+    nextPlaylist,
+    prevPlaylist,
   };
 }

@@ -7,12 +7,14 @@ import { SocialLinks } from "@/app/components/SocialLinks";
 import { Player } from "@/app/components/Player";
 import { TrackList } from "@/app/components/TrackList";
 import { ListenersModal } from "@/app/components/ListenersModal";
+import { PlaylistSelector } from "@/app/components/PlaylistSelector";
 import { usePlayer } from "@/app/hooks/usePlayer";
 
 export default function Home() {
   const player = usePlayer();
   const [isListenersOpen, setIsListenersOpen] = useState(false);
   const [isTrackListOpen, setIsTrackListOpen] = useState(false);
+  const [isPlaylistSelectorOpen, setIsPlaylistSelectorOpen] = useState(false);
 
   return (
     <main className="relative flex min-h-dvh flex-1 flex-col items-center justify-between overflow-hidden">
@@ -38,12 +40,12 @@ export default function Home() {
       </header>
 
       {/* Middle visual element */}
-      <div className="z-0 my-auto text-center px-4 pointer-events-none select-none">
+      <div className="z-0 my-auto text-center px-4 pointer-events-none select-none transition-all duration-500">
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif tracking-wider text-white/90 drop-shadow-[0_0_25px_rgba(245,166,35,0.4)]">
-          प्यार के पल
+          {player.currentPlaylist.hindiTitle || player.currentPlaylist.name}
         </h1>
         <p className="mt-2 text-xs sm:text-sm text-white/60 tracking-widest uppercase font-mono">
-          Nostalgic Melodies
+          {player.currentPlaylist.subtitle}
         </p>
       </div>
 
@@ -52,6 +54,7 @@ export default function Home() {
         <Player
           player={player}
           onOpenTrackList={() => setIsTrackListOpen(true)}
+          onOpenPlaylistSelector={() => setIsPlaylistSelectorOpen(true)}
         />
       </footer>
 
@@ -64,6 +67,22 @@ export default function Home() {
         onSelectTrack={(i) => {
           player.selectTrack(i);
           setIsTrackListOpen(false);
+        }}
+        currentPlaylist={player.currentPlaylist}
+        playlists={player.playlists}
+        onSelectPlaylist={(id) => {
+          player.switchPlaylist(id);
+        }}
+      />
+
+      {/* Playlist Swiper & Selector Modal */}
+      <PlaylistSelector
+        isOpen={isPlaylistSelectorOpen}
+        onClose={() => setIsPlaylistSelectorOpen(false)}
+        playlists={player.playlists}
+        currentPlaylistId={player.currentPlaylist.id}
+        onSelectPlaylist={(id) => {
+          player.switchPlaylist(id);
         }}
       />
 
