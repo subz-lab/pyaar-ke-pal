@@ -31,9 +31,9 @@ export const playlists: Playlist[] = [
   },
   {
     id: "playlist-2",
-    name: "Deepshit by Tee 🌙☕",
-    hindiTitle: "Deepshit by Tee 🌙☕",
-    subtitle: "Late Night Vibes & Melodies",
+    name: "Deepshit",
+    hindiTitle: "Deepshit",
+    subtitle: "by Tee 🌙☕",
     description: "Curated 38 soulful hits by Nusrat Fateh Ali Khan, Arijit Singh, KK, Atif Aslam & Kailash Kher.",
     cover: "/playlist2-cover.jpeg",
     bgWide: "/playlist2-cover.jpeg",
