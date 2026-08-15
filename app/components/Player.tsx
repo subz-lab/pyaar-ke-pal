@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import type { PlayerState } from "@/app/hooks/usePlayer";
+import { getAssetPath } from "@/app/lib/playlists";
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -79,7 +80,7 @@ export function Player({
         {/* Spinning vinyl */}
         <div className="relative w-[80px] h-[80px] shrink-0 rounded-full overflow-hidden shadow-2xl ring-1 ring-white/20">
           <img
-            src={currentTrack.cover}
+            src={getAssetPath(currentTrack.cover)}
             alt={currentTrack.title}
             className={`w-full h-full object-cover vinyl-spin ${!isPlaying ? "vinyl-paused" : ""}`}
           />
@@ -192,7 +193,7 @@ export function Player({
         <div className="flex items-center gap-3">
           <div className="relative w-14 h-14 shrink-0 rounded-full overflow-hidden shadow-xl ring-1 ring-white/20">
             <img
-              src={currentTrack.cover}
+              src={getAssetPath(currentTrack.cover)}
               alt={currentTrack.title}
               className={`w-full h-full object-cover vinyl-spin ${!isPlaying ? "vinyl-paused" : ""}`}
             />

@@ -14,6 +14,23 @@ export interface Playlist {
   tracks: Track[];
 }
 
+export function getAssetPath(path: string): string {
+  if (!path) return path;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+    return path;
+  }
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (typeof window !== "undefined") {
+    const pathPrefix = window.location.pathname.startsWith("/pyaar-ke-pal")
+      ? "/pyaar-ke-pal"
+      : "";
+    if (pathPrefix && !cleanPath.startsWith(pathPrefix)) {
+      return `${pathPrefix}${cleanPath}`;
+    }
+  }
+  return cleanPath;
+}
+
 export const playlist2Tracks: Track[] = playlist2Data as Track[];
 
 export const playlists: Playlist[] = [

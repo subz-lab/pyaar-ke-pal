@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { type Playlist } from "@/app/lib/playlists";
+import { type Playlist, getAssetPath } from "@/app/lib/playlists";
 import { RotatingVinylIcon } from "@/app/components/Player";
 
 interface PlaylistSelectorProps {
@@ -112,7 +112,7 @@ export function PlaylistSelector({
           {/* Main Card View */}
           <div className="relative w-full max-w-xs aspect-square rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/20 group">
             <img
-              src={currentCard.cover}
+              src={getAssetPath(currentCard.cover)}
               alt={currentCard.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />

@@ -9,6 +9,7 @@ import { TrackList } from "@/app/components/TrackList";
 import { ListenersModal } from "@/app/components/ListenersModal";
 import { PlaylistSelector } from "@/app/components/PlaylistSelector";
 import { usePlayer } from "@/app/hooks/usePlayer";
+import { getAssetPath } from "@/app/lib/playlists";
 
 export default function Home() {
   const player = usePlayer();
@@ -33,9 +34,9 @@ export default function Home() {
             >
               {/* Responsive background picture */}
               <picture className="w-full h-full block">
-                <source media="(orientation: portrait)" srcSet={playlist.bgTall} />
+                <source media="(orientation: portrait)" srcSet={getAssetPath(playlist.bgTall)} />
                 <img
-                  src={playlist.bgWide}
+                  src={getAssetPath(playlist.bgWide)}
                   alt={playlist.name}
                   className="w-full h-full object-cover object-center transition-all duration-1000"
                 />

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { type Playlist } from "@/app/lib/playlists";
+import { type Playlist, getAssetPath } from "@/app/lib/playlists";
 import { type Track } from "@/app/lib/tracks";
 
 interface TrackListProps {
@@ -152,7 +152,7 @@ export function TrackList({
                 {/* Cover art (small) */}
                 <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 ring-1 ring-white/10 shadow-md">
                   <img
-                    src={track.cover}
+                    src={getAssetPath(track.cover)}
                     alt={track.title}
                     className="w-full h-full object-cover"
                   />
