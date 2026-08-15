@@ -130,11 +130,11 @@ export const tracks: Track[] = [
   },
   {
     id: 16,
-    title: "Chehra Hai Ya Chand Khila Hai",
+    title: "Saagar Jaisi Aankhon Wali",
     artist: "Kishore Kumar",
-    cover: "https://c.saavncdn.com/356/SacStar-Hindi-2021-20210816153022-500x500.jpg",
-    audioUrl: "https://aac.saavncdn.com/356/34c675acc7adf89d700f0281c2be2fbb_320.mp4",
-    duration: 335
+    cover: "https://c.saavncdn.com/132/Best-of-Kishore-Da-Hindi-2026-20260617153038-500x500.jpg",
+    audioUrl: "https://aac.saavncdn.com/132/f22b92ecac00e9d452320c9573279184_320.mp4",
+    duration: 303
   },
   {
     id: 17,
