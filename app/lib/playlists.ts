@@ -62,7 +62,7 @@ export const playlists: Playlist[] = [
     hindiTitle: "Deepshit",
     subtitle: "by Tee 🌙☕",
     description:
-      "Curated 38 soulful hits by Nusrat Fateh Ali Khan, Arijit Singh, KK, Atif Aslam & Kailash Kher.",
+      "Curated 39 soulful hits by Nusrat Fateh Ali Khan, Arijit Singh, KK, Atif Aslam & Kailash Kher.",
     cover: "/playlist2-cover.jpeg",
     bgWide: "/playlist2-cover.jpeg",
     bgTall: "/playlist2-cover.jpeg",
