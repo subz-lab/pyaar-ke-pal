@@ -8,6 +8,9 @@ export interface Playlist {
   subtitle: string;
   description: string;
   cover: string;
+  bgWide: string;
+  bgTall: string;
+  gradientOverlay?: string;
   tracks: Track[];
 }
 
@@ -21,6 +24,9 @@ export const playlists: Playlist[] = [
     subtitle: "Nostalgic Melodies",
     description: "Timeless romantic classics from KK, Kishore Kumar, Rafi, Nusrat & legendary icons.",
     cover: "https://c.saavncdn.com/179/Om-Shanti-Om-Hindi-2007-20241205141724-500x500.jpg",
+    bgWide: "/bg/scene-wide.png",
+    bgTall: "/bg/scene-tall.png",
+    gradientOverlay: "from-black/35 via-transparent to-black/60",
     tracks: tracks,
   },
   {
@@ -30,6 +36,9 @@ export const playlists: Playlist[] = [
     subtitle: "Soulful Favorites",
     description: "Handpicked gems by Nusrat Fateh Ali Khan, Arijit Singh, KK, Atif Aslam & Kailash Kher.",
     cover: "/playlist2-cover.jpeg",
+    bgWide: "/playlist2-cover.jpeg",
+    bgTall: "/playlist2-cover.jpeg",
+    gradientOverlay: "from-black/60 via-black/30 to-black/80",
     tracks: playlist2Tracks,
   },
 ];

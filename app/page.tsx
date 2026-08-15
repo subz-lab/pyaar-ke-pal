@@ -18,9 +18,38 @@ export default function Home() {
 
   return (
     <main className="relative flex min-h-dvh flex-1 flex-col items-center justify-between overflow-hidden">
-      {/* 1. Fixed background div (-z-20) */}
-      <div className="fixed inset-0 -z-20 hero-bg bg-cover bg-center transition-all duration-700">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/60 pointer-events-none" />
+      {/* 1. Dynamic Background Layers for Playlists (-z-20) */}
+      <div className="fixed inset-0 -z-20 overflow-hidden bg-black">
+        {player.playlists.map((playlist) => {
+          const isActive = playlist.id === player.currentPlaylist.id;
+          return (
+            <div
+              key={playlist.id}
+              className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+                isActive
+                  ? "opacity-100 scale-100 z-10"
+                  : "opacity-0 scale-105 pointer-events-none z-0"
+              }`}
+            >
+              {/* Responsive background picture */}
+              <picture className="w-full h-full block">
+                <source media="(orientation: portrait)" srcSet={playlist.bgTall} />
+                <img
+                  src={playlist.bgWide}
+                  alt={playlist.name}
+                  className="w-full h-full object-cover object-center transition-all duration-1000"
+                />
+              </picture>
+
+              {/* Dynamic Gradient Overlay for Readability */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-b ${
+                  playlist.gradientOverlay || "from-black/40 via-transparent to-black/70"
+                } pointer-events-none`}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {/* 2. Fixed grain overlay (-z-10) */}
@@ -40,11 +69,11 @@ export default function Home() {
       </header>
 
       {/* Middle visual element */}
-      <div className="z-0 my-auto text-center px-4 pointer-events-none select-none transition-all duration-500">
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif tracking-wider text-white/90 drop-shadow-[0_0_25px_rgba(245,166,35,0.4)]">
+      <div className="z-0 my-auto text-center px-4 pointer-events-none select-none transition-all duration-700 transform">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif tracking-wider text-white/90 drop-shadow-[0_0_30px_rgba(245,166,35,0.5)]">
           {player.currentPlaylist.hindiTitle || player.currentPlaylist.name}
         </h1>
-        <p className="mt-2 text-xs sm:text-sm text-white/60 tracking-widest uppercase font-mono">
+        <p className="mt-2 text-xs sm:text-sm text-white/70 tracking-widest uppercase font-mono drop-shadow">
           {player.currentPlaylist.subtitle}
         </p>
       </div>
