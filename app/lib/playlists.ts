@@ -23,7 +23,7 @@ export const playlists: Playlist[] = [
     hindiTitle: "प्यार के पल",
     subtitle: "Nostalgic Melodies",
     description: "Timeless romantic classics from KK, Kishore Kumar, Rafi, Nusrat & legendary icons.",
-    cover: "https://c.saavncdn.com/179/Om-Shanti-Om-Hindi-2007-20241205141724-500x500.jpg",
+    cover: "/bg/scene-tall.png",
     bgWide: "/bg/scene-wide.png",
     bgTall: "/bg/scene-tall.png",
     gradientOverlay: "from-black/35 via-transparent to-black/60",
