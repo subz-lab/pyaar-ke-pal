@@ -14,19 +14,28 @@ export interface Playlist {
   tracks: Track[];
 }
 
+const REPO_PREFIX = "/pyaar-ke-pal";
+
 export function getAssetPath(path: string): string {
   if (!path) return path;
-  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+  if (
+    path.startsWith("http://") ||
+    path.startsWith("https://") ||
+    path.startsWith("data:")
+  ) {
     return path;
   }
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  if (typeof window !== "undefined") {
-    const pathPrefix = window.location.pathname.startsWith("/pyaar-ke-pal")
-      ? "/pyaar-ke-pal"
-      : "";
-    if (pathPrefix && !cleanPath.startsWith(pathPrefix)) {
-      return `${pathPrefix}${cleanPath}`;
-    }
+
+  // Check if running on GitHub Pages (runtime or build-time)
+  const isGithubPages =
+    process.env.GITHUB_ACTIONS === "true" ||
+    process.env.NODE_ENV === "production" ||
+    (typeof window !== "undefined" &&
+      window.location.pathname.startsWith(REPO_PREFIX));
+
+  if (isGithubPages && !cleanPath.startsWith(REPO_PREFIX)) {
+    return `${REPO_PREFIX}${cleanPath}`;
   }
   return cleanPath;
 }
@@ -39,7 +48,8 @@ export const playlists: Playlist[] = [
     name: "Pyaar Ke Pal",
     hindiTitle: "प्यार के पल",
     subtitle: "Nostalgic Melodies",
-    description: "Timeless romantic classics from KK, Kishore Kumar, Rafi, Nusrat & legendary icons.",
+    description:
+      "Timeless romantic classics from KK, Kishore Kumar, Rafi, Nusrat & legendary icons.",
     cover: "/bg/scene-tall.png",
     bgWide: "/bg/scene-wide.png",
     bgTall: "/bg/scene-tall.png",
@@ -51,7 +61,8 @@ export const playlists: Playlist[] = [
     name: "Deepshit",
     hindiTitle: "Deepshit",
     subtitle: "by Tee 🌙☕",
-    description: "Curated 38 soulful hits by Nusrat Fateh Ali Khan, Arijit Singh, KK, Atif Aslam & Kailash Kher.",
+    description:
+      "Curated 38 soulful hits by Nusrat Fateh Ali Khan, Arijit Singh, KK, Atif Aslam & Kailash Kher.",
     cover: "/playlist2-cover.jpeg",
     bgWide: "/playlist2-cover.jpeg",
     bgTall: "/playlist2-cover.jpeg",
